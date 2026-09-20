@@ -1,5 +1,10 @@
 const { default: autoBind } = require("auto-bind");
 const UserModel = require("../user/user.model");
+const createHttpErrors = require("http-errors");
+const AuthMessages = require("./auth.message");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const bcrypt = require("bcrypt");
 
 class AuthService {
   #model;
@@ -7,8 +12,24 @@ class AuthService {
     autoBind(this);
     this.#model = UserModel;
   }
-  async sendOtp() {
-    ///v
+  async create({ fullname, name, password }) {
+    console.log("ok");
+    const checkExistByFullname = await this.#model.findOne({fullname});
+    if (checkExistByFullname) {
+      throw new createHttpErrors.NotFound(AuthMessages.NotFound);
+    }
+    const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 10);
+    const createBcrypt = await bcrypt.hash(password, saltRounds);
+    const createUser = await this.#model.create({
+      fullname,
+      name,
+      password: createBcrypt,
+    });
+    const accession = this.singToken({ fullname, id: createUser._id });
+    return accession;
+  }
+  singToken(payload) {
+    return jwt.sign(payload, process.env.URL_SECRT, { expiresIn: "1y" });
   }
 }
 

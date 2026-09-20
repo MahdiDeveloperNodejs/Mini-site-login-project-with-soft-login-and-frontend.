@@ -10,7 +10,7 @@ function swaggerConfig(app) {
         version: "1,0,0",
       },
     },
-    apis: [process.cwd + "/src/modules/**/*.swagger.js"],
+    apis: [process.cwd() + "/src/modules/**/*.swagger.js"],
   });
   const swagger = swaggerUI.setup(swaggerDocument, {});
   app.use("/swagger", swaggerUI.serve, swagger);

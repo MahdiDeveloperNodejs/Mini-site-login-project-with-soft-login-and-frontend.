@@ -1,5 +1,6 @@
 const { default: autoBind } = require("auto-bind");
 const authService = require("./auth.service");
+const AuthMessages = require("./auth.message");
 
 class AuthController {
   #service;
@@ -7,9 +8,14 @@ class AuthController {
     autoBind(this);
     this.#service = authService;
   }
-  async sendOTP(req, res, next) {
+  async create(req, res, next) {
     try {
-        
+      const { fullname, name, password } = req.body;
+      const user = await this.#service.create({ fullname, name, password });
+      return res.status(201).json({
+        message: AuthMessages.CreateLoginSuessfully,
+        user,
+      });
     } catch (error) {
       next(error);
     }

@@ -1,8 +1,9 @@
 const express = require("express");
-const router = require("./src/app.routes");
 const swaggerConfig = require("./src/config/swagger.config");
 const app = express();
 require("dotenv").config();
+require("./src/config/mongodb.config");
+const router = require("./src/app.routes");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 swaggerConfig(app);
