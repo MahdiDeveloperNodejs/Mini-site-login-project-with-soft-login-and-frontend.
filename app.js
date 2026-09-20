@@ -4,10 +4,14 @@ const app = express();
 require("dotenv").config();
 require("./src/config/mongodb.config");
 const router = require("./src/app.routes");
+const NotFoundHandler = require("./src/error/NotFoundHandler");
+const AllExceptionHandler = require("./src/error/AllExceptionHandler");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 swaggerConfig(app);
 app.use(router);
+NotFoundHandler(app);
+AllExceptionHandler(app);
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`server: http://localhost:${PORT}`);
