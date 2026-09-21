@@ -25,6 +25,7 @@ class AuthService {
       password: createBcrypt,
     });
     const accession = this.singToken({ fullname, id: createUser._id });
+    
     return accession;
   }
   singToken(payload) {

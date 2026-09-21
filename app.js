@@ -1,6 +1,7 @@
 const express = require("express");
 const swaggerConfig = require("./src/config/swagger.config");
 const app = express();
+const cookieparser = require("cookie-parser");
 require("dotenv").config();
 require("./src/config/mongodb.config");
 const router = require("./src/app.routes");
@@ -10,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 swaggerConfig(app);
 app.use(router);
+app.use(cookieparser());
 NotFoundHandler(app);
 AllExceptionHandler(app);
 const PORT = process.env.PORT;

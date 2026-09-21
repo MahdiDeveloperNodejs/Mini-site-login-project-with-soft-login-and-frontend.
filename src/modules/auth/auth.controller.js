@@ -1,6 +1,7 @@
 const { default: autoBind } = require("auto-bind");
 const authService = require("./auth.service");
 const AuthMessages = require("./auth.message");
+const cookieparser = require("cookie-parser");
 
 class AuthController {
   #service;
@@ -12,6 +13,7 @@ class AuthController {
     try {
       const { fullname, name, password } = req.body;
       const user = await this.#service.create({ fullname, name, password });
+      
       return res.status(201).json({
         message: AuthMessages.CreateLoginSuessfully,
         user,
